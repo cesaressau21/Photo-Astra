@@ -37,7 +37,7 @@ void MainWindow::createDocument()
     form->addRow(buttons);
     const auto validate = [=] {
         buttons->button(QDialogButtonBox::Ok)->setEnabled(!title->text().trimmed().isEmpty() &&
-            static_cast<std::uint64_t>(width->value()) * height->value() <= core::RasterImage::maxPixels);
+            static_cast<std::uint64_t>(width->value()) * static_cast<std::uint64_t>(height->value()) <= core::RasterImage::maxPixels);
     };
     connect(width, &QSpinBox::valueChanged, &dialog, validate);
     connect(height, &QSpinBox::valueChanged, &dialog, validate);

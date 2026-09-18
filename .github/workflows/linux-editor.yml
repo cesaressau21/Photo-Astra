@@ -1,0 +1,84 @@
+name: Linux editor
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: linux-editor-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  editor:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      CC: clang-18
+      CXX: clang++-18
+      QT_ROOT: ${{ github.workspace }}/.deps/Qt/6.8.3/gcc_64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+      - name: Install Linux build and display dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends clang-18 ninja-build python3-venv \
+            libgl1-mesa-dev libegl1-mesa-dev libfontconfig1 libdbus-1-3 \
+            libxkbcommon0 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 \
+            libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 \
+            libxcb-randr0 libxcb-shape0 libxcb-sync1 libxcb-xfixes0 libxcb-xkb1 \
+            xvfb xauth mesa-utils
+      - name: Install Qt 6.8.3
+        run: |
+          python3 -m venv .tools/aqt
+          .tools/aqt/bin/python -m pip install aqtinstall==3.3.0
+          .tools/aqt/bin/python -m aqt install-qt linux desktop 6.8.3 linux_gcc_64 --archives qtbase --outputdir .deps/Qt
+      - name: Restore Skia build
+        id: skia-cache
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: .deps/skia
+          key: skia-linux-x64-clang18-${{ hashFiles('cmake/skia-common.gn', 'cmake/Skia.cmake', 'scripts/bootstrap-skia-linux.sh') }}
+      - name: Build pinned Skia
+        run: bash scripts/bootstrap-skia-linux.sh Release 4
+      - name: Save successful Skia build
+        if: steps.skia-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: .deps/skia
+          key: ${{ steps.skia-cache.outputs.cache-primary-key }}
+      - name: Configure editor
+        run: |
+          cmake -S . -B build/linux-release -G Ninja -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$QT_ROOT" -DPHOTO_ASTRA_WARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON
+      - name: Build editor and tests
+        run: cmake --build build/linux-release --parallel 4
+      - name: Test offscreen CPU and file pipelines
+        run: ctest --test-dir build/linux-release --output-on-failure --output-junit results.xml
+      - name: Test OpenGL with Mesa software rendering
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          PHOTO_ASTRA_REQUIRE_GPU: '1'
+          PHOTO_ASTRA_TEST_SCREENSHOT: ${{ github.workspace }}/build/linux-release/canvas-opengl.png
+        run: |
+          xvfb-run -a -s '-screen 0 1280x1024x24' glxinfo -B
+          xvfb-run -a -s '-screen 0 1280x1024x24' \
+            build/linux-release/ui_tests -platform xcb -o build/linux-release/opengl-tests.txt,txt
+      - name: Retain test evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: linux-editor-test-evidence
+          path: |
+            build/linux-release/results.xml
+            build/linux-release/Testing/Temporary/LastTest.log
+            build/linux-release/opengl-tests.txt
+            build/linux-release/canvas-opengl.png
+          if-no-files-found: ignore
+          retention-days: 14

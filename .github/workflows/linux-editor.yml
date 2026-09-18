@@ -33,7 +33,7 @@ jobs:
             libxkbcommon0 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 \
             libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 \
             libxcb-randr0 libxcb-shape0 libxcb-sync1 libxcb-xfixes0 libxcb-xkb1 \
-            xvfb xauth mesa-utils
+            xvfb xauth mesa-utils gdb
       - name: Install Qt 6.8.3
         run: |
           python3 -m venv .tools/aqt
@@ -69,6 +69,7 @@ jobs:
         run: |
           xvfb-run -a -s '-screen 0 1280x1024x24' glxinfo -B
           xvfb-run -a -s '-screen 0 1280x1024x24' \
+            gdb --batch --return-child-result -ex run -ex 'thread apply all bt' --args \
             build/linux-release/tests/ui_tests -platform xcb -o build/linux-release/opengl-tests.txt,txt
       - name: Retain test evidence
         if: always()

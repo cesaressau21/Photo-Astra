@@ -1,5 +1,20 @@
 # Punto de continuación — 17 de septiembre de 2026
 
+Hito Linux completo EN CURSO: Ubuntu 24.04, Clang 18, Qt 6.8.3 (qtbase + icu),
+Skia fijado compilado y cacheado. Commit 85ebcae compila editor Release y aprueba
+4/4 suites offscreen. Ejecución 35303532907 falla solo al probar OpenGL/Xvfb:
+SIGSEGV en layerBlendControlsAndCanvas, ~217 ms; Mesa llvmpipe LLVM 20.1.2,
+OpenGL 4.5. Aún NO validada la ruta OpenGL Linux. Se añade GDB al workflow para
+obtener el backtrace en el siguiente run; no quitar pruebas ni bajar warnings.
+Logs locales .tools/linux-fourth-logs; evidencia .tools/linux-evidence contiene
+LastTest.log, results.xml y opengl-tests.txt (muy corto por el crash).
+Correcciones ya publicadas: cast uint64_t de altura en FileActions; ICU faltante;
+referencias const en tests JSON; helper enterDialogFile escribe fileNameEdit
+porque QFileDialog::selectFile ignora el campo visible cuando tiene foco.
+Windows Release final 4/4: .tools/milestone12-windows-release.log.
+Guía nueva docs/linux.md; bootstrap scripts/bootstrap-skia-linux.sh.
+Respetar límite de uso del usuario: detenerse al alcanzar 99 % en cualquier ventana.
+
 Último hito: repositorio conectado y primera matriz core remota aprobada, 6/6.
 Windows 2022, Ubuntu 24.04 y macOS 15, Debug/Release; commit inicial d5cea0d.
 Origen: https://github.com/cesaressau21/Photo-Astra.git, rama main.

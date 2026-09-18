@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
+#include <string_view>
 
 namespace photoastra::ui {
 namespace {
@@ -54,6 +55,9 @@ protected:
     {
         connect(context(), &QOpenGLContext::aboutToBeDestroyed, this, [this] { cleanup(); }, Qt::DirectConnection);
         ready_ = owner_.renderer_->initializeOpenGl(context(), [](void* ctx, const char* name) -> render::GlProc {
+            // Qt owns the native display. GLX may return stubs for EGL names;
+            // do not expose them through Qt's OpenGL-only procedure resolver.
+            if (std::string_view(name).starts_with("egl")) return nullptr;
             return static_cast<QOpenGLContext*>(ctx)->getProcAddress(name);
         });
         emit owner_.backendChanged();

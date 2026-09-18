@@ -48,13 +48,17 @@ bool enterDialogFile(QFileDialog* dialog, const QString& path)
 
 class RefusingGlRenderer final : public photoastra::render::Renderer {
 public:
-    explicit RefusingGlRenderer(std::shared_ptr<bool> attempted) : attempted_(std::move(attempted)) {}
+    explicit RefusingGlRenderer(std::shared_ptr<bool> resolverChecked) : resolverChecked_(std::move(resolverChecked)) {}
     photoastra::render::RendererInfo info() const noexcept override { return cpu_.info(); }
-    bool initializeOpenGl(void*, photoastra::render::GlResolver) override { *attempted_ = true; return false; }
+    bool initializeOpenGl(void* context, photoastra::render::GlResolver resolver) override {
+        *resolverChecked_ = resolver(context, "glGetString") != nullptr &&
+            resolver(context, "eglQueryString") == nullptr && resolver(context, "eglGetCurrentDisplay") == nullptr;
+        return false;
+    }
     bool renderRaster(const photoastra::core::Document& doc, const photoastra::core::Viewport& view,
                       photoastra::render::RasterTarget target) override { return cpu_.renderRaster(doc, view, target); }
 private:
-    std::shared_ptr<bool> attempted_;
+    std::shared_ptr<bool> resolverChecked_;
     photoastra::render::SkiaRenderer cpu_;
 };
 
@@ -678,8 +682,8 @@ private slots:
     }
     void rendererFailureFallsBackToCpu()
     {
-        const auto attempted = std::make_shared<bool>(false);
-        photoastra::ui::CanvasWidget canvas(std::make_unique<RefusingGlRenderer>(attempted));
+        const auto resolverChecked = std::make_shared<bool>(false);
+        photoastra::ui::CanvasWidget canvas(std::make_unique<RefusingGlRenderer>(resolverChecked));
         const auto pixels = std::make_shared<const photoastra::core::RasterImage>(photoastra::core::ImageExtent{1, 1},
             std::vector<std::uint8_t>{255, 0, 0, 255});
         canvas.setDocument(std::make_shared<const photoastra::core::Document>(photoastra::core::ImageExtent{1, 1}, "Fallback", pixels));
@@ -688,7 +692,8 @@ private slots:
         QVERIFY(QTest::qWaitForWindowExposed(&canvas));
         QTRY_VERIFY(canvas.findChild<QOpenGLWidget*>() == nullptr);
         QVERIFY(!canvas.rendererInfo().gpuAccelerated);
-        if (qEnvironmentVariableIsSet("PHOTO_ASTRA_REQUIRE_GPU")) QVERIFY(*attempted);
+        if (qEnvironmentVariableIsSet("PHOTO_ASTRA_REQUIRE_GPU"))
+            QVERIFY2(*resolverChecked, "Qt resolver must expose GL functions and reject EGL queries");
         const auto frame = canvas.grab().toImage();
         QVERIFY(!frame.isNull());
         QVERIFY(canvas.close());

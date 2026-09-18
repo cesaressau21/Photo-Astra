@@ -1,0 +1,5 @@
+add_library(photo_astra_application STATIC DocumentSession.cpp ImageExport.cpp include/photoastra/application/DocumentSession.h)
+add_library(PhotoAstra::Application ALIAS photo_astra_application)
+target_include_directories(photo_astra_application PUBLIC include)
+target_link_libraries(photo_astra_application PUBLIC PhotoAstra::Io Qt6::Concurrent PRIVATE PhotoAstra::Render)
+photo_astra_target_defaults(photo_astra_application)

@@ -1,0 +1,7 @@
+/build*/
+/.deps/
+/.tools/
+/out/
+/CMakeUserPresets.json
+*.user
+aqtinstall.log

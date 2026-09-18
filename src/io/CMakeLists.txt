@@ -1,0 +1,5 @@
+add_library(photo_astra_io STATIC ImageLoader.cpp ImageWriter.cpp ProjectFile.cpp)
+add_library(PhotoAstra::Io ALIAS photo_astra_io)
+target_include_directories(photo_astra_io PUBLIC include)
+target_link_libraries(photo_astra_io PUBLIC PhotoAstra::Core Qt6::Gui)
+photo_astra_target_defaults(photo_astra_io)

@@ -1,0 +1,5 @@
+add_library(photo_astra_ui STATIC MainWindow.cpp FileActions.cpp LayerScaleDialog.cpp LayersPanel.cpp EffectsPanel.cpp CanvasWidget.cpp include/photoastra/ui/CanvasWidget.h include/photoastra/ui/LayersPanel.h)
+add_library(PhotoAstra::Ui ALIAS photo_astra_ui)
+target_include_directories(photo_astra_ui PUBLIC include)
+target_link_libraries(photo_astra_ui PUBLIC Qt6::Widgets PhotoAstra::Application PhotoAstra::Render PRIVATE Qt6::OpenGLWidgets)
+photo_astra_target_defaults(photo_astra_ui)

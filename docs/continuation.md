@@ -1,17 +1,18 @@
 # Punto de continuación — 17 de septiembre de 2026
 
-Último hito: presets y CI core preparados, Windows Debug/Release 1/1 por preset;
-actionlint 1.7.12 sin errores. Matriz remota de seis trabajos aún NO ejecutada.
-No hay remoto Git configurado; WSL consultado sin entorno Linux utilizable.
+Último hito: repositorio conectado y primera matriz core remota aprobada, 6/6.
+Windows 2022, Ubuntu 24.04 y macOS 15, Debug/Release; commit inicial d5cea0d.
+Origen: https://github.com/cesaressau21/Photo-Astra.git, rama main.
+Ejecución: https://github.com/cesaressau21/Photo-Astra/actions/runs/35302057942.
+Los presets locales Windows también pasaron; actionlint 1.7.12 sin errores.
 Archivos nuevos: CMakePresets.json, scripts/build-core.ps1,
 .github/workflows/core.yml y docs/ci.md. Logs .tools/milestone10-core-*.log.
 No se modificó el editor ni se repitieron sus pruebas en este hito.
 
 Hito anterior, modos de fusión terminados: Release/Debug 4/4; core independiente 1/1;
 UI Windows GPU 23/23. Paquete actualizado en out/package; iniciado y respondiendo
-con título Sin título — Photo Astra · V0.1. Sin commits/publicación.
-Mantener límite solicitado: detenerse si alguna ventana de uso alcanza 99 %.
-Última lectura de uso: 92 % cinco horas / 61 % semanal.
+con título Sin título — Photo Astra · V0.1. Binarios y dependencias fuera de Git.
+La licencia propia sigue pendiente; no se aplicó GPL ni se publicaron releases.
 
 Capas → Escalar…: porcentajes X/Y, enlace opcional, reset, vista previa aislada,
 aceptar un SetScale y Undo/Redo; cancelar/Escape no modifica sesión. Escala
@@ -29,10 +30,8 @@ buffers originales ni dependencias. Archivo UI anterior LayerScaleDialog.cpp int
 Captura y reporte GPU: build/release/blend-controls.png, blend-gpu-tests.txt.
 Logs: .tools/milestone9-{release,debug,install}.log.
 
-Siguiente unidad recomendada: obtener la primera ejecución remota de la matriz
-core cuando el usuario indique el repositorio y autorice publicar; no inventar
-remoto ni subir el proyecto por cuenta propia. Después, preparar y compilar
-Qt/Skia/editor en un entorno Linux real. Ver docs/ci.md para alcance y dependencias.
-Las funciones mínimas V0.1 están presentes; Linux/macOS y empaquetado en esos
-sistemas todavía no se han probado. No afirmar soporte validado sin ejecutarlo.
+Siguiente unidad recomendada: preparar y compilar Qt/Skia/editor en un entorno
+Linux real. Ver docs/ci.md para alcance y dependencias. La matriz core está validada
+en los tres sistemas, pero la UI, GPU y empaquetado fuera de Windows siguen pendientes.
+No afirmar soporte completo validado hasta probar esos componentes.
 No comenzar plugins, PSD ni pinceles en el siguiente hito.

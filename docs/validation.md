@@ -253,6 +253,21 @@ Undo/Redo, exportación, Effect Stack o shaders de usuario.
 - Editor y motor no cambiaron; no se repitieron sus suites ajenas a este hito.
 - Logs .tools/milestone10-core-{debug,release}.log; detalles en [CI](ci.md).
 
+## Hito 11 — primera ejecución remota (17 de septiembre de 2026)
+
+Repositorio conectado: cesaressau21/Photo-Astra; commit inicial `d5cea0d` en main.
+[GitHub Actions 35302057942](https://github.com/cesaressau21/Photo-Astra/actions/runs/35302057942)
+terminó en success, con seis trabajos completados en success:
+
+- Windows 2022: Debug y Release.
+- Ubuntu 24.04: Debug y Release.
+- macOS 15: Debug y Release.
+
+Cada trabajo configura y compila el núcleo con warnings como errores y ejecuta
+core.document. No hubo errores de portabilidad que corregir. Esta comprobación
+no cubre Qt/Skia, UI, GPU ni paquetes Linux/macOS. La licencia del proyecto queda
+pendiente; se publicó código fuente, sin binarios ni dependencias descargadas.
+
 ## Evidencias locales ignoradas por Git
 
 - `.tools/skia-bootstrap-release.log`, `.tools/skia-bootstrap-debug.log`.

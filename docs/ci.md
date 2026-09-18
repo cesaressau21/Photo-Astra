@@ -8,10 +8,11 @@ y macOS 15, cada uno en Debug y Release. Compilan el núcleo C++20 y ejecutan
 La matriz comprueba Document, capas, History, efectos, transformaciones y Viewport;
 no demuestra que la ventana, OpenGL o el empaquetado funcionen en esos sistemas.
 
-Se ejecutará en push, pull request o lanzamiento manual desde GitHub Actions.
+Se ejecuta en push, pull request o lanzamiento manual desde GitHub Actions.
 Repositorio: [cesaressau21/Photo-Astra](https://github.com/cesaressau21/Photo-Astra).
 Los resultados remotos se consultan en [Actions](https://github.com/cesaressau21/Photo-Astra/actions/workflows/core.yml).
-La tabla siguiente registra las comprobaciones locales previas a la primera subida.
+La primera ejecución remota aprobó los seis trabajos sobre el commit `d5cea0d`:
+[ejecución 35302057942](https://github.com/cesaressau21/Photo-Astra/actions/runs/35302057942).
 El CI es opcional; compilar y usar el editor localmente no depende de ese servicio.
 
 Los trabajos tienen diez minutos de límite, permisos de lectura y checkout sin
@@ -54,7 +55,7 @@ de build distinta o un preset personal; no reutilices la caché de otro toolchai
 | --- | --- |
 | Presets y script MSVC, Debug y Release | Compilados; 1/1 test en cada configuración |
 | Workflow con actionlint 1.7.12 | Sin errores de sintaxis/expresiones; shellcheck/pyflakes no ejecutados |
-| Matriz remota GitHub | Consultar Actions; no se contabiliza como prueba local |
+| Matriz remota GitHub | 6/6 aprobados: Windows 2022, Ubuntu 24.04 y macOS 15, Debug/Release |
 | Linux local | No disponible; la consulta WSL no encontró un entorno utilizable |
 | macOS local | No disponible en este equipo Windows |
 | Editor Windows completo | Hito anterior: Release/Debug 4/4, GPU 23 casos; no modificado aquí |
@@ -80,8 +81,8 @@ concretos a verificar:
   bastan para declarar GPU funcional ni compatibilidad del paquete instalado.
 
 No se han modificado los enlaces o argumentos de Skia sin poder comprobarlos en
-esos sistemas. El siguiente resultado útil será una ejecución de la matriz core,
-y después una compilación completa del editor en Linux con sus cuatro suites.
+esos sistemas. El siguiente resultado útil será una compilación completa del
+editor en Linux con sus cuatro suites; la matriz core ya está comprobada.
 
 ## Documentación oficial consultada
 

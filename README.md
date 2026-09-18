@@ -70,7 +70,7 @@ Importar en Capas añade contenido. Las acciones pendientes están deshabilitada
 ```text
 CMakeLists.txt
 CMakePresets.json  Builds reproducibles del núcleo, Debug/Release
-.github/workflows/ Matriz CI del núcleo Windows/Linux/macOS (pendiente de ejecutar)
+.github/workflows/ Matriz CI del núcleo Windows/Linux/macOS (6/6 aprobados)
 cmake/       Opciones, integración y configuración fijada de Skia
 src/
   app/       main.cpp: ensamblado de dependencias y argumentos
@@ -142,8 +142,9 @@ regenera la configuración de CMake.
 
 ## Linux/macOS y núcleo independiente
 
-La estructura CMake incluye ambas plataformas, pero **todavía no se han probado
-sus builds**. Prepara Skia según [docs/skia.md](docs/skia.md), Qt y un compilador:
+El núcleo ya compila y pasa sus pruebas en Linux/macOS mediante CI. **La aplicación
+completa con Qt/Skia todavía no está validada allí.** Prepara Skia según
+[docs/skia.md](docs/skia.md), Qt y un compilador:
 
 ```sh
 cmake -S . -B build/dev -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/ruta/al/kit/Qt -DPHOTO_ASTRA_WARNINGS_AS_ERRORS=ON
@@ -162,8 +163,9 @@ ctest --preset core-debug
 
 Requiere Ninja. En Windows, `scripts/build-core.ps1 -Configuration Debug` prepara
 MSVC y ejecuta estos pasos. Usa `core-release` o `-Configuration Release` para
-Release. La matriz CI de seis trabajos está preparada; Linux/macOS todavía
-no tienen resultados de ejecución. Ver [alcance y estado del CI](docs/ci.md).
+Release. La primera matriz CI pasó los seis trabajos de Windows/Linux/macOS.
+Ver [ejecución comprobada](https://github.com/cesaressau21/Photo-Astra/actions/runs/35302057942)
+y [alcance del CI](docs/ci.md).
 
 ## Ejecutable y despliegue local
 

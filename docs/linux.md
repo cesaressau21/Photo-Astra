@@ -7,6 +7,11 @@ conserva los resultados de CTest, el registro de QtTest y una captura del Canvas
 
 ## Preparación
 
+Comprobación del 18 de septiembre de 2026: commit `a9a0485`,
+[ejecución 35357936757](https://github.com/cesaressau21/Photo-Astra/actions/runs/35357936757).
+Editor y tests compilados; CTest 4/4; QtTest OpenGL 23 aprobados, ninguno omitido.
+Captura del Canvas revisada. OpenGL se probó con Mesa/llvmpipe, no con GPU física.
+
 Instala Git, Python 3 con venv, CMake >= 3.24, Ninja, Clang 18, bibliotecas de
 desarrollo OpenGL/EGL y dependencias de Qt/X11. La lista exacta de paquetes Ubuntu
 está en `.github/workflows/linux-editor.yml`. Xvfb, xauth y mesa-utils se usan
@@ -54,6 +59,12 @@ rendimiento ni demuestra que el proveedor OpenGL use hardware. El CI define
 incluyendo lectura del framebuffer y comparación con la exportación PNG.
 
 ## Límites de la comprobación
+
+El crash inicial al arrancar Skia se corrigió en el adaptador Qt: el resolver
+OpenGL rechaza nombres EGL. Qt gestiona el display/contexto nativo, y las consultas
+EGL no deben obtenerse mediante un resolver GLX que puede devolver stubs inválidos.
+El test de fallback comprueba también ese contrato. No se modificó Skia ni se
+desactivaron pruebas o warnings para conseguir que compilara.
 
 El resultado del workflow se debe consultar antes de afirmar que una revisión
 está validada. No se publica un instalador Linux en este hito. Siguen pendientes

@@ -268,6 +268,23 @@ core.document. No hubo errores de portabilidad que corregir. Esta comprobación
 no cubre Qt/Skia, UI, GPU ni paquetes Linux/macOS. La licencia del proyecto queda
 pendiente; se publicó código fuente, sin binarios ni dependencias descargadas.
 
+## Hito 12 — editor Linux y corrección OpenGL (18 de septiembre de 2026)
+
+- Ubuntu 24.04 x86_64, Clang 18, Qt 6.8.3, Skia fijado: editor Release compilado
+  con warnings como errores, CTest 4/4 y UI OpenGL 23/23, sin casos omitidos.
+- Evidencia: [run 35357936757](https://github.com/cesaressau21/Photo-Astra/actions/runs/35357936757),
+  commit a9a0485; artefacto linux-editor-test-evidence. Copia local en
+  .tools/linux-verified, captura canvas-opengl.png revisada.
+- Mesa llvmpipe LLVM 20.1.2 en Xvfb: ruta OpenGL por software; GPU física Linux,
+  Wayland, paquete Linux y editor completo macOS no están validados.
+- Fallos corregidos: conversión de signo en área del documento, ICU del kit Qt,
+  copias de QJsonValue y automatización de QFileDialog con el campo enfocado.
+- GDB situó el crash en GrGLExtensions::init. El adaptador Qt ahora rechaza
+  consultas EGL en su resolver OpenGL. La suite verifica GL disponible/EGL nulo,
+  composición, efectos, exportación y fallback CPU. Sin cambios en fuentes Skia.
+- Regresión Windows Release: 4/4 suites; GPU física NVIDIA: 23/23. Logs:
+  .tools/milestone12-resolver-windows.log y build/release/resolver-gpu-tests.txt.
+
 ## Evidencias locales ignoradas por Git
 
 - `.tools/skia-bootstrap-release.log`, `.tools/skia-bootstrap-debug.log`.

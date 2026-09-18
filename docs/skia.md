@@ -51,7 +51,14 @@ Se ha usado MSVC 19.44. La documentación de Skia recomienda Clang para mejor
 rendimiento de algunas rutas CPU. Este hito verifica corrección y GPU; no
 incluye benchmarks ni afirma rendimiento de producción del raster CPU.
 
-## Linux y macOS: instrucciones preparadas, no ejecutadas
+## Linux comprobado (Release)
+
+Ubuntu 24.04 x86_64 y Clang 18: `bash scripts/bootstrap-skia-linux.sh Release 4`.
+El script comparte los argumentos anteriores y fija cc/cxx a Clang 18. La
+compilación completa Qt/Skia y las pruebas están documentadas en [Linux](linux.md).
+Debug del editor completo y GPU física Linux siguen pendientes.
+
+## macOS: instrucciones preparadas, no ejecutadas
 
 Con Git, Python 3, Ninja, Clang/C++20 y las bibliotecas gráficas del sistema:
 

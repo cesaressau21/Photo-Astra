@@ -65,11 +65,12 @@ Logs locales: `.tools/milestone10-core-debug.log` y
 oficial de actionlint y se verificó su SHA-256 antes de ejecutarlo; queda en
 `.tools/`, fuera del repositorio y de las dependencias del editor.
 
-## Siguiente etapa: editor completo fuera de Windows
+## Editor completo: Linux validado, macOS pendiente
 
-Antes de ampliar el CI a la UI hay que ejecutar una compilación real de Qt/Skia
-en cada plataforma. La preparación manual está en [Skia](skia.md). Requisitos
-concretos a verificar:
+El workflow linux-editor.yml ya compila Qt/Skia/editor en Ubuntu 24.04 Release
+y pasa las cuatro suites más 23 casos OpenGL con Mesa/llvmpipe. Ver [guía y evidencia
+Linux](linux.md). macOS completo aún requiere una compilación real de Qt/Skia.
+La preparación manual está en [Skia](skia.md). Requisitos por plataforma:
 
 - Kit Qt 6 con Widgets, OpenGLWidgets, Concurrent y Test, y CMake capaz de encontrarlo.
 - Skia en la revisión fijada, con Ganesh/OpenGL y configuración Debug/Release
@@ -80,9 +81,8 @@ concretos a verificar:
 - Separar tests offscreen de pruebas con contexto OpenGL real. Los primeros no
   bastan para declarar GPU funcional ni compatibilidad del paquete instalado.
 
-No se han modificado los enlaces o argumentos de Skia sin poder comprobarlos en
-esos sistemas. El siguiente resultado útil será una compilación completa del
-editor en Linux con sus cuatro suites; la matriz core ya está comprobada.
+El siguiente resultado útil será compilar y probar el editor completo en macOS.
+Los paquetes distribuidos, Wayland y una GPU física Linux son comprobaciones aparte.
 
 ## Documentación oficial consultada
 

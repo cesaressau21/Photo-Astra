@@ -1,7 +1,7 @@
 # Photo Astra
 
 Editor de imágenes de escritorio en C++20. **V0.1 en desarrollo: hito de
-modos de fusión básicos completado y validado en Windows.** La aplicación funciona localmente,
+editor validado en Windows y en Linux Release con Mesa/X11.** La aplicación funciona localmente,
 sin servicios cloud.
 
 ## Qué funciona
@@ -142,9 +142,11 @@ regenera la configuración de CMake.
 
 ## Linux/macOS y núcleo independiente
 
-El núcleo ya compila y pasa sus pruebas en Linux/macOS mediante CI. **La aplicación
-completa con Qt/Skia todavía no está validada allí.** Prepara Skia según
-[docs/skia.md](docs/skia.md), Qt y un compilador:
+El núcleo compila y pasa sus pruebas en Linux/macOS mediante CI. El editor completo
+ya está validado en Ubuntu 24.04 x86_64, Qt 6.8.3, Clang 18 y Skia, en Release:
+cuatro suites y 23 casos OpenGL con Mesa/llvmpipe. **macOS completo, GPU física
+Linux y Wayland siguen pendientes.** Ver [guía Linux](docs/linux.md).
+Con Qt y Skia preparados, la configuración general es:
 
 ```sh
 cmake -S . -B build/dev -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/ruta/al/kit/Qt -DPHOTO_ASTRA_WARNINGS_AS_ERRORS=ON

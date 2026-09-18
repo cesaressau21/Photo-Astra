@@ -35,6 +35,17 @@
 #include <cmath>
 #include <photoastra/io/ProjectFile.h>
 
+namespace {
+bool enterDialogFile(QFileDialog* dialog, const QString& path)
+{
+    // QFileDialog::selectFile ignores a visible filename field that already has focus.
+    auto* name = dialog->findChild<QLineEdit*>(QStringLiteral("fileNameEdit"));
+    if (!name) return false;
+    name->setText(path);
+    return true;
+}
+}
+
 class RefusingGlRenderer final : public photoastra::render::Renderer {
 public:
     explicit RefusingGlRenderer(std::shared_ptr<bool> attempted) : attempted_(std::move(attempted)) {}
@@ -238,7 +249,7 @@ private slots:
         QTimer::singleShot(0, &window, [&window, path] {
             auto* dialog = window.findChild<QFileDialog*>(QStringLiteral("exportDialog"));
             QVERIFY(dialog);
-            dialog->selectFile(path);
+            QVERIFY(enterDialogFile(dialog, path));
             QMetaObject::invokeMethod(dialog, "accept", Qt::QueuedConnection);
         });
         QSignalSpy exported(&session, &photoastra::application::DocumentSession::exportFinished);
@@ -294,8 +305,8 @@ private slots:
                 QVERIFY(types);
                 QTest::keyClick(types, Qt::Key_End);
             }
-            dialog->selectFile(scenario >= 4 ? directory.filePath(QStringLiteral("no-extension")) :
-                scenario == 1 ? directory.filePath(QStringLiteral("wrong.bmp")) : path);
+            QVERIFY(enterDialogFile(dialog, scenario >= 4 ? directory.filePath(QStringLiteral("no-extension")) :
+                scenario == 1 ? directory.filePath(QStringLiteral("wrong.bmp")) : path));
             QMetaObject::invokeMethod(dialog, "accept", Qt::QueuedConnection);
         });
         QTimer watchdog;
@@ -378,7 +389,7 @@ private slots:
         window.show();
         QTimer::singleShot(0, &window, [&] {
             auto* dialog = window.findChild<QFileDialog*>(QStringLiteral("saveProjectDialog"));
-            QVERIFY(dialog); dialog->selectFile(directory.filePath(QStringLiteral("editable")));
+            QVERIFY(dialog); QVERIFY(enterDialogFile(dialog, directory.filePath(QStringLiteral("editable"))));
             QMetaObject::invokeMethod(dialog, "accept", Qt::QueuedConnection);
         });
         QSignalSpy saved(&session, &application::DocumentSession::projectSaved);
@@ -428,7 +439,7 @@ private slots:
                 if (sawSave) return;
                 sawSave = true;
                 if (scenario == 1) dialog->reject();
-                else { dialog->selectFile(path); QMetaObject::invokeMethod(dialog, "accept", Qt::QueuedConnection); }
+                else { QVERIFY(enterDialogFile(dialog, path)); QMetaObject::invokeMethod(dialog, "accept", Qt::QueuedConnection); }
             }
         });
         QTimer watchdog;

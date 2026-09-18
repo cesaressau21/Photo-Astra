@@ -67,12 +67,12 @@ private slots:
         layer["x"] = 1000001; layers[0] = layer; root["layers"] = layers;
         QVERIFY(writeAll(path, pack(root, pixels))); QVERIFY(!io::loadProject(path, cancelled).document);
         layer["x"] = 1;
-        for (const QJsonValue invalid : {QJsonValue(0), QJsonValue(-2), QJsonValue(65), QJsonValue(0.001), QJsonValue("large"), QJsonValue()}) {
+        for (const QJsonValue& invalid : {QJsonValue(0), QJsonValue(-2), QJsonValue(65), QJsonValue(0.001), QJsonValue("large"), QJsonValue()}) {
             layer["scaleX"] = invalid; layers[0] = layer; root["layers"] = layers;
             QVERIFY(writeAll(path, pack(root, pixels))); QVERIFY(!io::loadProject(path, cancelled).document);
         }
         layer["scaleX"] = 1.5;
-        for (const QJsonValue invalid : {QJsonValue("overlay"), QJsonValue(1), QJsonValue()}) {
+        for (const QJsonValue& invalid : {QJsonValue("overlay"), QJsonValue(1), QJsonValue()}) {
             layer["blendMode"] = invalid; layers[0] = layer; root["layers"] = layers;
             QVERIFY(writeAll(path, pack(root, pixels))); QVERIFY(!io::loadProject(path, cancelled).document);
         }

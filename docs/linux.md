@@ -17,7 +17,7 @@ Desde la raíz del repositorio, instala el kit Qt:
 ```sh
 python3 -m venv .tools/aqt
 .tools/aqt/bin/python -m pip install aqtinstall==3.3.0
-.tools/aqt/bin/python -m aqt install-qt linux desktop 6.8.3 linux_gcc_64 --archives qtbase --outputdir .deps/Qt
+.tools/aqt/bin/python -m aqt install-qt linux desktop 6.8.3 linux_gcc_64 --archives qtbase icu --outputdir .deps/Qt
 bash scripts/bootstrap-skia-linux.sh Release 4
 ```
 
@@ -26,6 +26,8 @@ modificadas o una revisión diferente. Descarga GN mediante el script oficial de
 esa revisión. Comparte `cmake/skia-common.gn` con Windows; no modifica sus fuentes.
 La salida es `.deps/skia/out/photoastra/libskia.a`. Admite `Debug` en una carpeta
 separada, pero el primer workflow completo comprueba solo Release.
+El archivo `icu` instala la versión de ICU que requiere QtCore; no basta con
+la versión ICU distinta que pueda incluir la distribución.
 
 ## Compilar, probar y abrir
 
